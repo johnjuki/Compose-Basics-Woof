@@ -28,8 +28,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -97,7 +99,7 @@ fun WoofTopAppBar(modifier: Modifier = Modifier) {
  */
 @Composable
 fun DogItem(dog: Dog, modifier: Modifier = Modifier) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
 
     Card(modifier = modifier.padding(8.dp), elevation = 4.dp) {
         Column {
@@ -111,7 +113,9 @@ fun DogItem(dog: Dog, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.weight(1f))
                 DogItemButton(expanded = expanded, onClick = { expanded = !expanded })
             }
-            DogHobby(dog.hobbies)
+            if (expanded) {
+                DogHobby(dog.hobbies)
+            }
         }
     }
 }
@@ -127,7 +131,7 @@ private fun DogItemButton(
 ) {
     IconButton(onClick = onClick) {
         Icon(
-            imageVector = Icons.Filled.ExpandMore,
+            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore ,
             tint = MaterialTheme.colors.secondary,
             contentDescription = stringResource(R.string.expand_button_content_description)
         )
